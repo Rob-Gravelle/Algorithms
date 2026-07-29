@@ -35,7 +35,18 @@ Shift:     A B A B X  <-- Backtracks text pointer!
 
 ---
 
-## 2. Historical Background
+
+## 2️ Historical Background
+
+### The Pioneers Behind the Algorithm
+
+| Donald Knuth | Vaughan Pratt | James H. Morris |
+| :---: | :---: | :---: |
+| ![Knuth](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/KnuthAtComputer.jpg/220px-KnuthAtComputer.jpg) | ![Pratt](https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Vaughan_Pratt.jpg/220px-Vaughan_Pratt.jpg) | ![Morris](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/James_H_Morris.jpg/220px-James_H_Morris.jpg) |
+| *Stanford University* | *Stanford University* | *Carnegie Mellon / Berkeley* |
+
+* **1970:** Knuth & Pratt and Morris independently discover zero-backtrack search.
+* **1977:** Jointly publish *"Fast Pattern Matching in Strings"* in *SIAM Journal on Computing*.
 
 ### A Breakthrough in String Processing (1970-1977)
 
