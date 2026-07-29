@@ -36,32 +36,25 @@ Shift:     A B A B X  <-- Backtracks text pointer!
 ---
 
 
-## 2️ Historical Background
+## 2. Historical Background
 
 ### The Pioneers Behind the Algorithm
 
-| Donald Knuth | Vaughan Pratt | James H. Morris |
-| :---: | :---: | :---: |
-| ![Knuth](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/KnuthAtComputer.jpg/220px-KnuthAtComputer.jpg) | ![Pratt](https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Vaughan_Pratt.jpg/220px-Vaughan_Pratt.jpg) | ![Morris](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/James_H_Morris.jpg/220px-James_H_Morris.jpg) |
-| *Stanford University* | *Stanford University* | *Carnegie Mellon / Berkeley* |
+<div align="center">
+  <img src="./Images/KMP.png" width="600" alt="KMP Algorithm Inventors: Knuth, Pratt, Morris">
+</div>
 
-* **1970:** Knuth & Pratt and Morris independently discover zero-backtrack search.
-* **1977:** Jointly publish *"Fast Pattern Matching in Strings"* in *SIAM Journal on Computing*.
-
-### A Breakthrough in String Processing (1970-1977)
+### A Breakthrough in String Processing (1970–1977)
 
 * **Co-Inventors**: 
   * Donald Knuth & Vaughan Pratt (Stanford, 1970)
   * James H. Morris (UC Berkeley, 1970)
-* **Published**: Joint paper in 1977 (SIAM Journal on Computing).
+* **Published**: Joint paper in 1977 (*Fast Pattern Matching in Strings*, SIAM Journal on Computing).
 * **Historical Significance**:
   * First deterministic linear-time algorithm for string matching.
-  * Solved performance penalties on repetitive text (e.g., DNA strings, binary signals).
+  * Solved severe performance penalties on repetitive text (e.g., DNA strings, binary signals).
 
 > "KMP proved that we never need to move backward in the target text."
-
----
-
 ## 3. The Core Intuition
 
 ### The "Smart Reader" Paradigm
