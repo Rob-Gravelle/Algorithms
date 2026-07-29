@@ -41,7 +41,7 @@ Shift:     A B A B X  <-- Backtracks text pointer!
 ### The Pioneers Behind the Algorithm
 
 <div align="center">
-  <img src="./Images/KMP.png" width="600" alt="KMP Algorithm Inventors: Knuth, Pratt, Morris">
+  <img src="./Images/KMPUPD.png" width="600" alt="KMP Algorithm Inventors: Knuth, Pratt, Morris">
 </div>
 
 ### A Breakthrough in String Processing (1970–1977)
