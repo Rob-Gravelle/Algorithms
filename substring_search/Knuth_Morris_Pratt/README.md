@@ -26,14 +26,12 @@ Every algorithm in this module is structured as a self-contained package:
 
 ```text
 substring_search/
-├── README.md                     # Module overview & comparison table
-├── Knuth_Morris_Pratt/           # KMP Search Module
-│   ├── KMP.py                    # Algorithm implementation & demo
+├── README.md                     # Module overview & algorithm comparison
+├── Knuth_Morris_Pratt/
+│   ├── KMP.py                    # Reference Python implementation
 │   ├── test_kmp.py               # Automated pytest suite (10 tests)
-│   ├── README.md                 # Navigation hub & quickstart
-│   ├── RECRUITER_SUMMARY.md      # Non-technical / Executive summary
-│   ├── TECHNICAL_SPEC.md         # Engineering spec & DFA analysis
-│   ├── KMP_PRESENTATION.md       # Slide deck (Marp / GitHub compatible)
-│   └── Images/                   # Visual failure link diagrams
-├── Boyer_Moore/                  # (In Development)
-└── Rabin_Karp/                   # (In Development)
+│   ├── README.md                 # Algorithm overview & quick start
+│   ├── RECRUITER_SUMMARY.md      # Executive / recruiter overview
+│   ├── TECHNICAL_SPEC.md         # Engineering specification & failure-transition analysis
+│   ├── KMP_PRESENTATION.md       # Presentation slides (Marp compatible)
+│   └── Images/                   # Figures and diagrams
