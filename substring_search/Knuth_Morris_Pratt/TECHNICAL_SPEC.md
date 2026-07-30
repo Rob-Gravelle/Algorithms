@@ -23,7 +23,7 @@ For a pattern P of length m, LPS[i] stores the length of the longest proper pref
 
 ---
 
-### 3. State Machine & Execution Walkthrough
+### 3. Failure Transitions & Execution Walkthrough
 
 The core innovation of KMP is its preprocessing phase, which constructs the Longest Prefix Suffix (LPS) table. This table acts as a deterministic finite automaton (DFA) that directs state fallbacks without rewinding the text pointer $i$.
 

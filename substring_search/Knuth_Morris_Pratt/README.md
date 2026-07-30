@@ -35,3 +35,4 @@ substring_search/
 │   ├── TECHNICAL_SPEC.md         # Engineering specification & failure-transition analysis
 │   ├── KMP_PRESENTATION.md       # Presentation slides (Marp compatible)
 │   └── Images/                   # Figures and diagrams
+```

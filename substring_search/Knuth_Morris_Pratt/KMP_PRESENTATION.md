@@ -79,8 +79,6 @@ Imagine searching for the pattern ABABAC inside a long document:
 
 ## 4. The Secret Weapon: LPS Table
 
-## 4. The Secret Weapon: LPS Table
-
 ### Longest Proper Prefix That Is Also a Suffix
 
 The **Longest Prefix Suffix (LPS)** array is the key data structure that makes KMP efficient. Rather than restarting from the beginning after a mismatch, the LPS array tells the algorithm how much of the previously matched pattern can still be reused.
@@ -118,7 +116,19 @@ The diagram visualizes how the LPS table guides the search:
 <summary><b>ASCII Representation (fallback if images cannot be displayed)</b></summary>
 
 ```text
-...
+   Match A       Match B       Match A       Match B       Match A       Match C
+[0] --------> [1] --------> [2] --------> [3] --------> [4] --------> [5] --------> MATCH
+
+Fallback transitions use:
+
+j = LPS[j - 1]
+
+For ABABAC:
+
+LPS = [0, 0, 1, 2, 3, 0]
+
+Example:
+State 5 falls back to State 3 because LPS[4] = 3.
 ```
 
 </details>
@@ -126,50 +136,51 @@ The diagram visualizes how the LPS table guides the search:
 
 ## 5. Algorithm Walkthrough
 
-### Matching Phase Mechanics
+### Matching Phase Example
 
-Pattern: A B A B A C
+Consider searching for the pattern `ABABAC` within the following text:
 
-State Table / LPS Array:
- +-----+---+---+---+---+---+---+
- |  i  | 0 | 1 | 2 | 3 | 4 | 5 |
- +-----+---+---+---+---+---+---+
- |  P  | A | B | A | B | A | C |
- | LPS | 0 | 0 | 1 | 2 | 3 | 0 |
- +-----+---+---+---+---+---+---+
+```text
+Text:     A B A B A D A B A B A C
+Pattern:  A B A B A C
+Match:    A B A B A ×
+```
 
-State Transition & Fallback Structure (Failure Link Diagram):
+The first five characters (`ABABA`) match successfully, but the sixth character does not (`D` in the text versus `C` in the pattern).
 
-   (Match A)    (Match B)    (Match A)    (Match B)    (Match A)    (Match C)
- [0] --------> [1] --------> [2] --------> [3] --------> [4] --------> [5] --------> ((MATCH))
-  ^             |             |            |            |            |
-  |  (Fail A)   |  (Fail B)   |  (Fail A)  |  (Fail B)  |  (Fail A)  |  (Fail C)
-  +-------------+-------------+            |            |            |
-  |                                        v            v            v
-  +----------------------------------------+------------+------------+
-                                         Fallback to State 3 (LPS[4] = 3)
+At this point, KMP does **not** restart the search.
 
-Key Mechanics:
-  • Green Transitions: Advance state index upon matching input characters.
-  • Fallback Links: Instantly shift pattern pointer j to LPS[j - 1] on mismatch.
-  • Result: Guarantees zero text pointer rewinds (O(N) total comparisons).
----
+Instead, it consults the LPS table:
 
-Matching Phase Mechanics:
+```text
+Matched Prefix:  ABABA
+LPS[4]:          3
+Reusable Prefix: ABA
+```
 
-  Text:    A B A B D A B A C D A B A B C A B A B
-  Pattern: A B A B C
-  Match:   A B A B x  (Mismatch: 'D' vs 'C' at Pattern index 4)
+Because the LPS value is **3**, KMP knows that the final three matched characters (`ABA`) are also the beginning of the pattern.
 
-Steps Taken:
-  1. Look up LPS[4 - 1] -> LPS[3] = 2 ("AB").
-  2. Do NOT move the text pointer backward.
-  3. Jump pattern index from 4 to 2.
+Rather than moving backward in the text, the algorithm:
 
-Next Comparison:
-  Text:    A B A B D A B A C D A B A B C A B A B
-  Pattern:     A B A B C
-               x  (Immediate mismatch 'D' vs 'A'; advance text pointer)
+1. Keeps the **text pointer** on the current character (`D`).
+2. Moves the **pattern pointer** from index **5** to index **3** using the LPS table.
+3. Compares the same text character against the shorter reusable prefix.
+4. Continues searching without restarting.
+
+The alignment now becomes:
+
+```text
+Text:     A B A B A D A B A B A C
+Pattern:        A B A B A C
+                    ↑
+           Pattern pointer resets here
+```
+
+### Key Observation
+
+The important guarantee is that **the text pointer never moves backward**.
+
+Only the **pattern pointer** changes position by following the LPS table. This allows KMP to preserve previous work and guarantees an overall runtime of **O(N + M)**.
 
 
 ## 6. Complexity Analysis

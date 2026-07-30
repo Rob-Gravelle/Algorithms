@@ -23,7 +23,7 @@ Traditional search methods often re-read the same passages of text over and over
 Imagine searching for the pattern **`ABABAC`** inside a long document. 
 
 1. Suppose the algorithm matches **`ABABA`**, but then hits a mismatch on the 6th character.
-2. Instead of restarting the search from the beginning, KMP analyzes the portion of the pattern that has already matched. (**`ABABA`**).
+2. Instead of restarting the search from the beginning, KMP analyzes the portion of the pattern that has already matched: **`ABABA`**.
 3. It recognizes that **`ABA`** appears at both the **beginning** (prefix) and the **end** (suffix) of the matched text.
 4. Because those 3 characters (**`ABA`**) are guaranteed to match, KMP shifts the pattern forward and resumes checking from the 4th character (`B`), **saving 3 redundant character checks instantly**.
 
