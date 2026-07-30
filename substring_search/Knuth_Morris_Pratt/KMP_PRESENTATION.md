@@ -1,25 +1,26 @@
-================================================================================
-                    KNUTH-MORRIS-PRATT (KMP) ALGORITHM
-           Linear-Time Substring Search Without Backtracking
-                        Presented by: Rob Gravelle
-================================================================================
+# Knuth-Morris-Pratt (KMP) Algorithm
+## Linear-Time Substring Search Without Backtracking
+**Presented by:** Rob Gravelle
 
---------------------------------------------------------------------------------
-AGENDA
---------------------------------------------------------------------------------
-1. The Core Problem: Why Naive Search Fails
-2. Historical Background: Origins & Milestones
-3. The Core Intuition: Avoiding Redundant Checks
-4. The Secret Weapon: Longest Prefix Suffix (LPS) Table
-5. State Machine Mechanics & Failure Links Diagram
-6. Algorithm Walkthrough: Step-by-Step Execution
-7. Complexity Analysis: O(N+M) vs O(N * M)
-8. Real-World Applications: Where KMP Shines
-9. Summary & Takeaways
+---
 
---------------------------------------------------------------------------------
-SLIDE 1: THE CORE PROBLEM
---------------------------------------------------------------------------------
+## Agenda
+
+1. **The Core Problem**: Why Naive Search Fails
+2. **Historical Background**: Origins & Milestones
+3. **The Core Intuition**: Avoiding Redundant Checks
+4. **The Secret Weapon**: Longest Prefix Suffix (LPS) Table
+5. **Algorithm Walkthrough**: Step-by-Step Execution
+6. **Complexity & Benchmarks**: O(N+M) vs O(N * M)
+7. **Real-World Applications**: Where KMP Shines
+8. **Summary & Takeaways**
+
+---
+
+## 1. The Core Problem
+
+### The Naive Substring Search Bottleneck
+
 The Naive Substring Search Bottleneck:
 
 When searching for a pattern in text using standard methods:
@@ -36,33 +37,33 @@ Example:
   • Primary Flaw: Discards valuable structural information about characters 
     that were already successfully matched.
 
---------------------------------------------------------------------------------
-SLIDE 2: HISTORICAL ORIGINS & PIONEERS
---------------------------------------------------------------------------------
-+-----------------------+ +-----------------------+ +-----------------------+
-|     Donald Knuth      | |     Vaughan Pratt     | |    James H. Morris    |
-|  Stanford University  | |  Stanford University  | | Cal Berkeley / CMU    |
-+-----------------------+ +-----------------------+ +-----------------------+
+---
 
-A Breakthrough in String Processing (1970–1977):
 
-  • 1970: Knuth & Pratt and Morris independently discover zero-backtrack search.
-  • 1970: Morris independently invents the technique while developing a text
-          editor buffer at UC Berkeley.
-  • 1977: The three researchers unite to publish the definitive joint paper:
-          "Fast Pattern Matching in Strings" (SIAM Journal on Computing).
+## 2. Historical Background
 
-Historical Significance:
-  • First deterministic linear-time algorithm for string matching.
-  • Solved severe performance penalties on repetitive text (e.g., DNA strings,
-    binary signals).
+### The Pioneers Behind the Algorithm
+
+<div align="center">
+  <img src="./Images/KMPUPD.png" width="600" alt="KMP Algorithm Inventors: Knuth, Pratt, Morris">
+</div>
+
+### A Breakthrough in String Processing (1970–1977)
+
+* **Co-Inventors**: 
+  * Donald Knuth & Vaughan Pratt (Stanford, 1970)
+  * James H. Morris (UC Berkeley, 1970)
+* **Published**: Joint paper in 1977 (*Fast Pattern Matching in Strings*, SIAM Journal on Computing).
+* **Historical Significance**:
+  * First deterministic linear-time algorithm for string matching.
+  * Solved severe performance penalties on repetitive text (e.g., DNA strings, binary signals).
 
 > "KMP proved that we never need to move backward in the target text."
 
---------------------------------------------------------------------------------
-SLIDE 3: THE CORE INTUITION
---------------------------------------------------------------------------------
-The "Smart Reader" Paradigm:
+
+## 3. The Core Intuition
+
+### The "Smart Reader" Paradigm
 
 Imagine searching for the pattern ABABAC inside a long document:
 
@@ -75,28 +76,41 @@ Imagine searching for the pattern ABABAC inside a long document:
      • Keep your finger on the main text, align the prefix ABA, and keep moving 
        forward without re-reading a single character!
 
---------------------------------------------------------------------------------
-SLIDE 4: THE SECRET WEAPON (LPS TABLE)
---------------------------------------------------------------------------------
-Longest Proper Prefix which is also a Suffix:
+---
 
-The LPS array precomputes shift distances for every prefix of the pattern.
+## 4. The Secret Weapon: LPS Table
 
-For Pattern "ABABC":
+### Longest Proper Prefix which is also a Suffix
 
-+-------+-----------+--------------------+---------------------+-----------+
-| Index | Substring | Proper Prefixes    | Suffixes            | LPS Value |
-+-------+-----------+--------------------+---------------------+-----------+
-|   0   | A         | None               | None                |     0     |
-|   1   | AB        | A                  | B                   |     0     |
-|   2   | ABA       | A, AB              | A, BA               |   1 (A)   |
-|   3   | ABAB      | A, AB, ABA         | B, AB, BAB          |   2 (AB)  |
-|   4   | ABABC     | A, AB, ABA, ABAB   | C, BC, ABC, BABC    |     0     |
-+-------+-----------+--------------------+---------------------+-----------+
+The **LPS array** stores precomputed shift distances for every prefix of the pattern.
 
---------------------------------------------------------------------------------
-SLIDE 5: STATE MACHINE MECHANICS & FAILURE LINKS
---------------------------------------------------------------------------------
+For Pattern `ABABC`:
+
+| Index | Substring | Proper Prefixes | Suffixes | LPS Value |
+| :---: | :---: | :---: | :---: | :---: |
+| **0** | `A` | None | None | **0** |
+| **1** | `AB` | `A` | `B` | **0** |
+| **2** | `ABA` | `A`, `AB` | `A`, `BA` | **1** (`A`) |
+| **3** | `ABAB` | `A`, `AB`, `ABA` | `B`, `AB`, `BAB` | **2** (`AB`) |
+| **4** | `ABABC` | ... | ... | **0** |
+
+## How KMP Avoids Backtracking: Failure Links
+
+<div align="center">
+  <img src="./Images/kmp_failure_links.png" width="700" alt="KMP State Machine Diagram">
+</div>
+
+* **Green Arrows:** Advance to the next character state on a match.
+* **Red/Fallback Links:** Shift instantly to $LPS[j-1]$ on a mismatch.
+* **Result:** Zero text index rewinds ($O(N)$ total comparisons).
+
+
+---
+
+## 5. Algorithm Walkthrough
+
+### Matching Phase Mechanics
+
 Pattern: A B A B A C
 
 State Table / LPS Array:
@@ -122,10 +136,8 @@ Key Mechanics:
   • Green Transitions: Advance state index upon matching input characters.
   • Fallback Links: Instantly shift pattern pointer j to LPS[j - 1] on mismatch.
   • Result: Guarantees zero text pointer rewinds (O(N) total comparisons).
+---
 
---------------------------------------------------------------------------------
-SLIDE 6: ALGORITHM WALKTHROUGH
---------------------------------------------------------------------------------
 Matching Phase Mechanics:
 
   Text:    A B A B D A B A C D A B A B C A B A B
@@ -142,9 +154,9 @@ Next Comparison:
   Pattern:     A B A B C
                x  (Immediate mismatch 'D' vs 'A'; advance text pointer)
 
---------------------------------------------------------------------------------
-SLIDE 7: COMPLEXITY ANALYSIS
---------------------------------------------------------------------------------
+
+## 6. Complexity Analysis
+
 Metric Comparison:
 
 +--------------------------+-----------------+-----------------+
@@ -161,44 +173,27 @@ Why O(N) Matching Time?
   • The pattern index j falls back at most N times overall throughout search.
   • Amortized work per input character is strictly O(1).
 
---------------------------------------------------------------------------------
-SLIDE 8: REAL-WORLD APPLICATIONS
---------------------------------------------------------------------------------
-Where KMP Shines in Production:
 
-  • Streaming Data Processing:
-    Ideal for non-seekable inputs (network sockets, live telemetry, continuous
-    log files) where moving backward is physically impossible.
+---
 
-  • Bioinformatics & Genomics:
-    Fast, deterministic pattern extraction across long sequences with small,
-    highly repetitive alphabets (DNA sequences: {A, C, G, T}).
+## 7. Real-World Applications
 
-  • Intrusion Detection Systems (IDS):
-    Evaluates packet payload signatures against live network traffic buffers in
-    real time.
+* **Streaming Data Processing**: Ideal for non-seekable inputs (network sockets, live telemetry) where backtracking is impossible.
+* **Bioinformatics**: Fast matching on small, highly repetitive alphabets (DNA sequences: {A, C, G, T}).
+* **Log Analysis**: Efficient single-pass scanning of massive server log files.
+* **Intrusion Detection Systems (IDS)**: Matching packet signatures in live network traffic.
 
-  • Log & Text Processing:
-    Efficient single-pass scanning across massive multi-gigabyte log archives.
+---
 
---------------------------------------------------------------------------------
-SLIDE 9: SUMMARY & KEY TAKEAWAYS
---------------------------------------------------------------------------------
-  1. Zero Text Backtracking:
-     Processes target text strictly left-to-right in a single pass.
+## 8. Summary & Takeaways
 
-  2. Preprocessing Power:
-     Invests O(M) time upfront building the LPS array to guarantee deterministic
-     O(N) search execution.
+1. **Zero Text Backtracking**: Processes input text strictly left-to-right.
+2. **Preprocessing Power**: Invests O(M) upfront to guarantee O(N) runtime later.
+3. **Deterministic**: No probabilistic risks or hash collisions (unlike Rabin-Karp).
+4. **Portfolio Ready**: Clean Python implementation available in `KMP.py`.
 
-  3. Deterministic Performance:
-     No worst-case performance penalties or hash collision risks (unlike Rabin-Karp).
+#  Questions & Discussion
 
-  4. Portfolio Ready:
-     Implementation, technical specs, and interactive benchmarks available in KMP.py.
-
-================================================================================
-                            QUESTIONS & DISCUSSION
-                         Created by: Rob Gravelle
-                       GitHub: github.com/Rob-Gravelle
-================================================================================
+**Created by:** Rob Gravelle
+**GitHub:** github.com/Rob-Gravelle
+---
