@@ -73,38 +73,55 @@ Imagine searching for the pattern ABABAC inside a long document:
      • You already know you read A - B - A - B - A.
      • Notice that A - B - A appears at both the START (prefix) and END (suffix)
        of the matched text.
-     • Keep your finger on the main text, align the prefix ABA, and keep moving 
-       forward without re-reading a single character!
+     • Keep your finger on the main text, align the prefix ABA, and continue searching. Throughout the process, the text pointer never moves backward.
 
 ---
 
 ## 4. The Secret Weapon: LPS Table
 
-### Longest Proper Prefix which is also a Suffix
+## 4. The Secret Weapon: LPS Table
 
-The **LPS array** stores precomputed shift distances for every prefix of the pattern.
+### Longest Proper Prefix That Is Also a Suffix
 
-For Pattern `ABABC`:
+The **Longest Prefix Suffix (LPS)** array is the key data structure that makes KMP efficient. Rather than restarting from the beginning after a mismatch, the LPS array tells the algorithm how much of the previously matched pattern can still be reused.
 
-| Index | Substring | Proper Prefixes | Suffixes | LPS Value |
-| :---: | :---: | :---: | :---: | :---: |
-| **0** | `A` | None | None | **0** |
-| **1** | `AB` | `A` | `B` | **0** |
-| **2** | `ABA` | `A`, `AB` | `A`, `BA` | **1** (`A`) |
-| **3** | `ABAB` | `A`, `AB`, `ABA` | `B`, `AB`, `BAB` | **2** (`AB`) |
-| **4** | `ABABC` | ... | ... | **0** |
+For the pattern `ABABAC`, the LPS table is:
+
+| Index | Pattern Prefix | LPS Value | Explanation |
+| :---: | :------------: | :-------: | :---------- |
+| **0** | `A`      | **0** | No proper prefix/suffix |
+| **1** | `AB`     | **0** | No match |
+| **2** | `ABA`    | **1** | `A` |
+| **3** | `ABAB`   | **2** | `AB` |
+| **4** | `ABABA`  | **3** | `ABA` |
+| **5** | `ABABAC` | **0** | No matching prefix/suffix |
+
+Instead of restarting the search after a mismatch, KMP consults this table to determine the next pattern position while **keeping the text pointer fixed**.
+
+---
 
 ## How KMP Avoids Backtracking: Failure Links
 
 <div align="center">
-  <img src="./Images/kmp_failure_links.png" width="700" alt="KMP State Machine Diagram">
+  <img src="./Images/kmp_failure_links.png"
+       width="700"
+       alt="KMP State Machine Diagram">
 </div>
 
-* **Green Arrows:** Advance to the next character state on a match.
-* **Red/Fallback Links:** Shift instantly to $LPS[j-1]$ on a mismatch.
-* **Result:** Zero text index rewinds ($O(N)$ total comparisons).
+The diagram visualizes how the LPS table guides the search:
 
+- **Green arrows:** Advance to the next state after a successful character match.
+- **Red arrows:** Follow the LPS (failure) links after a mismatch to preserve the longest reusable prefix.
+- **Key guarantee:** **The text pointer never moves backward.** Only the pattern pointer is repositioned using the LPS table, allowing KMP to complete the search in **O(N + M)** time.
 
+<details>
+<summary><b>ASCII Representation (fallback if images cannot be displayed)</b></summary>
+
+```text
+...
+```
+
+</details>
 ---
 
 ## 5. Algorithm Walkthrough
