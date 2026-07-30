@@ -1,9 +1,7 @@
-
 # Algorithm Overview: Knuth-Morris-Pratt (KMP)
-**Author:** Rob Gravelle | **Category:** Substring Search / Pattern Matching
-
-# Algorithm Overview: Knuth-Morris-Pratt (KMP)
+**Author:** Rob Gravelle  
 **Category:** Substring Search / Pattern Matching  
+**Complexity:** Time $O(n + m)$ | Space $O(m)$  
 **Primary Benefit:** Guaranteed linear-time search with zero backtracking in the target text.
 
 ---
@@ -20,11 +18,14 @@ Traditional search methods often re-read the same passages of text over and over
 
 ---
 
-### 3. Real-World Analogy: The "Smart Reader"
-Imagine you are proofreading a document, searching for the word **ONION**.
+### 3. Real-World Analogy: The Smart Reader
 
-* **The Basic Approach:** You start checking letters: O... N... I... O... but then the next letter is X. Realizing ONIOX is wrong, you move your finger back to the start and check the next spot to try again from scratch.
-* **The KMP Approach:** When you hit ONIOX, you realize you already read O-N-I-O. KMP notices that the sequence O-N appears at both the **beginning** and the **end** of ONIO. Instead of starting over at square one, KMP keeps your place in the main text, shifts the word ONION forward so the matching O-N lines up, and keeps reading continuously.
+Imagine searching for the pattern **`ABABAC`** inside a long document. 
+
+1. Suppose the algorithm matches **`ABABA`**, but then hits a mismatch on the 6th character.
+2. Instead of restarting the search from the beginning, KMP analyzes the portion of the pattern that has already matched. (**`ABABA`**).
+3. It recognizes that **`ABA`** appears at both the **beginning** (prefix) and the **end** (suffix) of the matched text.
+4. Because those 3 characters (**`ABA`**) are guaranteed to match, KMP shifts the pattern forward and resumes checking from the 4th character (`B`), **saving 3 redundant character checks instantly**.
 
 ---
 
@@ -32,3 +33,11 @@ Imagine you are proofreading a document, searching for the word **ONION**.
 * **Efficiency:** Guarantees fast search times regardless of how complex or repetitive the input text is.
 * **Stream Processing:** Because it never moves backward in the source text, KMP can search **live data streams** (like real-time network traffic or continuous log files) where you cannot "scroll back" to re-read previous data.
 * **Predictability:** Unlike some search algorithms whose speed varies wildly based on luck or text composition, KMP provides a reliable, fixed execution time guarantee.
+
+### Key Takeaways
+
+1. Guarantees O(n + m) worst-case performance.
+2. Never backtracks in the text.
+3. Ideal for large documents and streaming data.
+4. Uses an LPS (Longest Prefix Suffix) table to skip redundant comparisons.
+5. Frequently taught in computer science because it introduces preprocessing to eliminate repeated work.
